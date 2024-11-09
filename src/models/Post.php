@@ -2,33 +2,14 @@
 
 namespace App\Models;
 
-use PDO;
+use Illuminate\Database\Eloquent\Model;
 
-class Post {
-    private $conn;
-    private $table_name = "posts";
+class Post extends Model {
+    protected $table = 'posts';
+    protected $fillable = ['user_id', 'title', 'content'];
+    public $timestamps = false;
 
-    public $id;
-    public $title;
-    public $body;
-
-    public function __construct($db) {
-        $this->conn = $db;
-    }
-
-    public function create() {
-        // Implementar la lógica para crear un post
-    }
-
-    public function read() {
-        // Implementar la lógica para leer posts
-    }
-
-    public function update() {
-        // Implementar la lógica para actualizar un post
-    }
-
-    public function delete() {
-        // Implementar la lógica para eliminar un post
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }
