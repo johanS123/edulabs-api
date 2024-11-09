@@ -11,7 +11,7 @@ class UserController
     // Obtener todos los usuarios
     public function index(Request $request, Response $response, $args)
     {
-        $users = User::all();
+        $users = User::select('id', 'name', 'email', 'createDate')->get();
         $response->getBody()->write(json_encode($users));
         return $response->withHeader('Content-Type', 'application/json');
     }
@@ -27,7 +27,10 @@ class UserController
             return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
         }
 
-        $response->getBody()->write(json_encode($user));
+        $userData = $user->toArray();
+        unset($userData['password']);
+
+        $response->getBody()->write(json_encode($userData));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
@@ -42,10 +45,12 @@ class UserController
             return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
         }
 
-        $data = $request->getParsedBody();
+        $data = json_decode($request->getBody(), true);
         
         // Actualizar los campos que se envían en el request
-        $user->username = $data['username'] ?? $user->username;
+        $user->name = $data['name'] ?? $user->name;
+        $user->email = $data['email'] ?? $user->email;
+
         if (!empty($data['password'])) {
             $user->password = password_hash($data['password'], PASSWORD_BCRYPT);
         }
