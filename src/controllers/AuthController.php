@@ -67,7 +67,7 @@ class AuthController {
 
         // Si hay errores, los devuelve en la respuesta
         if (!empty($errors)) {
-            $response->getBody()->write(json_encode(['errors' => $errors]));
+            $response->getBody()->write(json_encode(['error' => $errors]));
             return $response->withStatus(422)->withHeader('Content-Type', 'application/json');
         }
 
