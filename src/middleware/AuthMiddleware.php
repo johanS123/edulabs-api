@@ -22,16 +22,10 @@ class AuthMiddleware
 
         $token = $matches[1];
 
-        // Depuración: Verificar el valor del token recibido
-        error_log('Token recibido: ' . $token);
-
         try {
-            error_log('Clave secreta: ' . $_ENV['JWT_SECRET']);
             $decoded = JWT::decode($token, new key($_ENV['JWT_SECRET'], 'HS256'));
             $request = $request->withAttribute('user', $decoded);
         } catch (\Exception $e) {
-            // Depuración: Verificar el error de decodificación
-            error_log('Error al decodificar el token: ' . $e->getMessage());
             $response = new \Slim\Psr7\Response();
             $response->getBody()->write(json_encode(['error' => 'Token inválido']));
             return $response->withStatus(401)->withHeader('Content-Type', 'application/json');

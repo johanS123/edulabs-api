@@ -9,7 +9,11 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $container = new Container();
 AppFactory::setContainer($container);
+
 $app = AppFactory::create();
+
+// // Agregar Middleware CORS globalmente
+// $app->add(new CorsMiddleware());
 
 // Cargar variables de entorno
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');

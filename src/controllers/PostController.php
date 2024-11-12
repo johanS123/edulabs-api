@@ -10,34 +10,50 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class PostController {
     public function index(Request $request, Response $response) {
-        $posts = Post::all();
-        $response->getBody()->write(json_encode($posts));
+        // Trae todos los posts con usuario y categoría
+        $posts = Post::with(['user', 'category'])->get();
+
+        // Retorna los posts como JSON sin el campo de password del usuario
+        $data = $posts->map(function ($post) {
+            $user = $post->user;
+            unset($user->password);
+            return [
+                'id' => $post->id,
+                'title' => $post->title,
+                'content' => $post->content,
+                'date' => $post->date,
+                'user' => $user,
+                'category' => $post->category,
+            ];
+        });
+
+        $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function store(Request $request, Response $response) {
         $data = json_decode($request->getBody(), true);
         $errors = [];
-        
+
         if (empty($data['title'])) {
             $errors['title'] = 'El campo title es obligatorio.';
         }
         if (empty($data['content'])) {
             $errors['content'] = 'El campo content es obligatorio.';
         }
-        if (empty($data['userId'])) {
-            $errors['userId'] = 'El campo userId es obligatorio.';
+        if (empty($data['user'])) {
+            $errors['user'] = 'El campo userId es obligatorio.';
         }
-        if (empty($data['categoryId'])) {
-            $errors['categoryId'] = 'El campo categoryId es obligatorio.';
+        if (empty($data['category'])) {
+            $errors['category'] = 'El campo categoryId es obligatorio.';
         }
 
          // Validación de las llaves foráneas
-        if (!empty($data['userId']) && !User::find($data['userId'])) {
-            $errors['userId'] = 'El usuario especificado no existe.';
+        if (!empty($data['user']) && !User::find($data['user'])) {
+            $errors['user'] = 'El usuario especificado no existe.';
         }
-        if (!empty($data['categoryId']) && !Category::find($data['categoryId'])) {
-            $errors['categoryId'] = 'La categoría especificada no existe.';
+        if (!empty($data['category']) && !Category::find($data['category'])) {
+            $errors['category'] = 'La categoría especificada no existe.';
         }
 
         // Si hay errores, los devuelve en la respuesta
@@ -49,8 +65,8 @@ class PostController {
         $post = Post::create([
             'title' => $data['title'],
             'content' => $data['content'],
-            'userId' => $data['userId'],
-            'categoryId' => $data['categoryId']
+            'userId' => $data['user'],
+            'categoryId' => $data['category']
         ]);
 
         $response->getBody()->write(json_encode($post));
@@ -71,15 +87,63 @@ class PostController {
             return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
         }
 
+        // Trae todos los posts con usuario y categoría
+        $posts = Post::with(['user', 'category'])->get();
+
         // Obtener todos los posts que pertenecen a la categoría
         $posts = Post::where('categoryId', $categoryId)->get();
+
+        // Retorna los posts como JSON sin el campo de password del usuario
+        $data = $posts->map(function ($post) {
+            $user = $post->user;
+            unset($user->password);
+            return [
+                'id' => $post->id,
+                'title' => $post->title,
+                'content' => $post->content,
+                'date' => $post->date,
+                'user' => $user,
+                'category' => $post->category,
+            ];
+        });
 
         // Devolver la lista de posts como respuesta JSON
         $response->getBody()->write(json_encode([
             'category' => $category->name,
-            'posts' => $posts
+            'posts' => $data
         ]));
 
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function update(Request $request, Response $response, $args) {
+        $postId = $args['id'];
+        $post = Post::find($postId);
+
+        if (!$post) {
+            $response->getBody()->write(json_encode(['error' => 'post no encontrado']));
+            return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
+        }
+
+        $data = json_decode($request->getBody(), true);
+        
+        // Verificar si la categoría existe
+        $category = Category::find($data['category']);
+        if (!$category) {
+            $response->getBody()->write(json_encode([
+                'error' => 'La categoría especificada no existe.'
+            ]));
+            return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
+        }
+
+        // Actualizar los campos que se envían en el request
+        $post->title = $data['title'] ?? $post->title;
+        $post->content = $data['content'] ?? $post->content;
+        $post->categoryId = $data['categoryId'] ?? $post->categoryId;
+
+        $post->save();
+
+        $response->getBody()->write(json_encode($post));
         return $response->withHeader('Content-Type', 'application/json');
     }
 

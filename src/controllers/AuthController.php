@@ -72,6 +72,7 @@ class AuthController {
         }
 
         $user = User::where('email', $data['email'])->first();
+        $dataToken = ['id' => $user->id, 'user' => $user->name];
 
         if ($user && password_verify($data['password'], $user->password)) {
             $issuedAt = time();
@@ -79,7 +80,7 @@ class AuthController {
             $payload = [
                 'iat' => $issuedAt,
                 'exp' => $expirationTime,
-                'sub' => $user->id
+                'sub' => $dataToken
             ];
 
             $token = JWT::encode($payload, $_ENV['JWT_SECRET'], 'HS256');
