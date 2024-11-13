@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class AuthController {
-    public function register(Request $request, Response $response) {
+    public function register(Request $request, Response $response): Response {
         $data = json_decode($request->getBody(), true);
         $errors = [];
 
@@ -49,7 +49,7 @@ class AuthController {
         return $response->withStatus(201)->withHeader('Content-Type', 'application/json');
     }
 
-    public function login(Request $request, Response $response) {
+    public function login(Request $request, Response $response): Response {
         $data = json_decode($request->getBody(), true);
         $errors = [];
 
