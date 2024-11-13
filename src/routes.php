@@ -1,8 +1,6 @@
 <?php
 
 use Slim\App;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Controllers\AuthController;
 use App\Controllers\PostController;
 use App\Controllers\UserController;
@@ -23,32 +21,27 @@ return function (App $app) {
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     });
 
-    $app->get('/', function (Request $request, Response $response, $args) {
-        $response->getBody()->write("Hello world!");
-        return $response;
-    });
-
-    // $app->post('/api/register', [AuthController::class ,'register']);
+    $app->post('/api/register', [AuthController::class ,'register']);
     $app->post('/api/login', [AuthController::class,'login']);
 
-    // $app->group('/api', function ($group) {
-    //     $group->get('/posts', [PostController::class, 'index']);
-    //     $group->post('/posts', [PostController::class, 'store']);
-    //     $group->put('/posts/{id}', [PostController::class, 'update']);
-    //     $group->get('/posts/{categoryId}', [PostController::class, 'getPostsByCategory']);
-    //     $group->delete('/posts/{id}', [UserController::class, 'delete']);
-    //     // usuarios
-    //     $group->get('/users', [UserController::class, 'index']);
-    //     $group->get('/users/{id}', [UserController::class, 'show']);
-    //     $group->put('/users/{id}', [UserController::class, 'update']);
-    //     $group->delete('/users/{id}', [UserController::class, 'delete']);
-    //     // categorias
-    //     $group->get('/categories', [CategoryController::class, 'index']);
+    $app->group('/api', function ($group) {
+        $group->get('/posts', [PostController::class, 'index']);
+        $group->post('/posts', [PostController::class, 'store']);
+        $group->put('/posts/{id}', [PostController::class, 'update']);
+        $group->get('/posts/{categoryId}', [PostController::class, 'getPostsByCategory']);
+        $group->delete('/posts/{id}', [UserController::class, 'delete']);
+        // usuarios
+        $group->get('/users', [UserController::class, 'index']);
+        $group->get('/users/{id}', [UserController::class, 'show']);
+        $group->put('/users/{id}', [UserController::class, 'update']);
+        $group->delete('/users/{id}', [UserController::class, 'delete']);
+        // categorias
+        $group->get('/categories', [CategoryController::class, 'index']);
     
-    // })->add(new AuthMiddleware());
+    })->add(new AuthMiddleware());
 
 
-    // $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
-    //     throw new HttpNotFoundException($request);
-    // });
+    $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+        throw new HttpNotFoundException($request);
+    });
 };
