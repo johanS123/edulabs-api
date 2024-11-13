@@ -19,26 +19,30 @@ $dotenv->load();
 // Obtener la URL de la base de datos de Heroku
 $databaseUrl = getenv('JAWSDB_URL');
 
-// Parsear la URL
-$urlParsed = parse_url($databaseUrl);
-
 // Configuración de base de datos
 $capsule = new Capsule();
-$capsule->addConnection([
-    'driver'    => 'mysql',
-    'host'      => $urlParsed['host'],
-    'port'      => $urlParsed['port'],
-    'database'  => ltrim($urlParsed['path'], '/'),
-    'username'  => $urlParsed['user'],
-    'password'  => $urlParsed['pass'],
-    'charset'   => 'utf8',
-    'collation' => 'utf8_unicode_ci',
-    'prefix'    => '',
-]);
 
-// Configurar Eloquent para usar el acceso global
-$capsule->setAsGlobal();
-$capsule->bootEloquent();
+if ($databaseUrl) {
+    $urlParsed = parse_url($databaseUrl);
+
+    $capsule->addConnection([
+        'driver'    => 'mysql',
+        'host'      => $urlParsed['host'],
+        'port'      => $urlParsed['port'],
+        'database'  => ltrim($urlParsed['path'], '/'),
+        'username'  => $urlParsed['user'],
+        'password'  => $urlParsed['pass'],
+        'charset'   => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix'    => '',
+    ]);
+
+    // Configurar Eloquent para usar el acceso global
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+} else {
+    die('Database configuration missing!');
+}
 
 // Colocar Capsule en el contenedor para que esté disponible en el resto de la aplicación
 $container->set('db', function () use ($capsule) {
