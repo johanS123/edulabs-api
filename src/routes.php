@@ -1,6 +1,8 @@
 <?php
 
 use Slim\App;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Controllers\AuthController;
 use App\Controllers\PostController;
 use App\Controllers\UserController;
@@ -19,6 +21,11 @@ return function (App $app) {
                 ->withHeader('Access-Control-Allow-Origin', '*')
                 ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    });
+
+    $app->get('/', function (Request $request, Response $response, $args) {
+        $response->getBody()->write("Hello world!");
+        return $response;
     });
 
     $app->post('/api/register', [AuthController::class, 'register']);
