@@ -28,8 +28,8 @@ return function (App $app) {
         return $response;
     });
 
-    $app->post('/api/register', AuthController::class . ':register');
-    $app->post('/api/login', AuthController::class . ':login');
+    // $app->post('/api/register', [AuthController::class ,'register']);
+    $app->post('/api/login', [AuthController::class,'login']);
 
     // $app->group('/api', function ($group) {
     //     $group->get('/posts', [PostController::class, 'index']);
