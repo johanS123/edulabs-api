@@ -16,14 +16,21 @@ $app = AppFactory::create();
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
+// Obtener la URL de la base de datos de Heroku
+$databaseUrl = getenv('JAWSDB_URL');
+
+// Parsear la URL
+$urlParsed = parse_url($databaseUrl);
+
 // Configuración de base de datos
 $capsule = new Capsule();
 $capsule->addConnection([
     'driver'    => 'mysql',
-    'host'      => $_ENV['DB_HOST'],
-    'database'  => $_ENV['DB_DATABASE'],
-    'username'  => $_ENV['DB_USERNAME'],
-    'password'  => $_ENV['DB_PASSWORD'],
+    'host'      => $urlParsed['host'],
+    'port'      => $urlParsed['port'],
+    'database'  => ltrim($urlParsed['path'], '/'),
+    'username'  => $urlParsed['user'],
+    'password'  => $urlParsed['pass'],
     'charset'   => 'utf8',
     'collation' => 'utf8_unicode_ci',
     'prefix'    => '',
