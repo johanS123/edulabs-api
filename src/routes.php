@@ -9,8 +9,6 @@ use App\Controllers\UserController;
 use App\Controllers\CategoryController;
 use App\Middleware\AuthMiddleware;
 use Slim\Exception\HttpNotFoundException;
-use App\Models\User;
-use Firebase\JWT\JWT;
 
 return function (App $app) {
     $app->options('/{routes:.+}', function ($request, $response, $args) {
@@ -30,11 +28,8 @@ return function (App $app) {
         return $response;
     });
 
-    // $app->post('/api/register', AuthController::class . ':register');
-    $app->post('/api/login', function (Request $request, Response $response): Response {
-        $response->getBody()->write(json_encode(["message" => "Login successful"]));
-        return $response->withHeader('Content-Type', 'application/json');
-    });
+    $app->post('/api/register', AuthController::class . ':register');
+    $app->post('/api/login', AuthController::class . ':login');
 
     // $app->group('/api', function ($group) {
     //     $group->get('/posts', [PostController::class, 'index']);
