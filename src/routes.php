@@ -38,7 +38,7 @@ return function (App $app) {
         // categorias
         $group->get('/categories', [CategoryController::class, 'index']);
     
-    })->add(new AuthMiddleware());
+    })->add(AuthMiddleware::class);
 
 
     $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
