@@ -22,7 +22,7 @@ return function (App $app) {
     });
 
     $app->post('/api/register', [AuthController::class ,'register']);
-    $app->post('/api/login', 'AuthController:login');
+    $app->post('/api/login', [AuthController::class ,'login']);
 
     $app->group('/api', function ($group) {
         $group->get('/posts', [PostController::class, 'index']);
