@@ -5,6 +5,7 @@ use App\Controllers\AuthController;
 use App\Controllers\PostController;
 use App\Controllers\UserController;
 use App\Controllers\CategoryController;
+use App\Controllers\HomeController;
 use App\Middleware\AuthMiddleware;
 use Slim\Exception\HttpNotFoundException;
 
@@ -21,6 +22,7 @@ return function (App $app) {
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     });
 
+    $app->get('/', [HomeController::class, 'index']);
     $app->post('/api/register', [AuthController::class ,'register']);
     $app->post('/api/login', [AuthController::class ,'login']);
 
