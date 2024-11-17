@@ -1,10 +1,13 @@
-# usa una imagen base de php con Apache
+# Usa una imagen base de PHP con Apache
 FROM php:8.1-apache
 
-# Instala las extensiones necesarias para Slim y Composer
-RUN docker-php-ext-install pdo pdo_mysql
+# Instala dependencias del sistema y extensiones de PHP
+RUN apt-get update && apt-get install -y \
+    libzip-dev zip unzip \
+    libsqlite3-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_sqlite
 
-# Habilita el modulo de reescritura de Apache
+# Habilita el módulo de reescritura de Apache
 RUN a2enmod rewrite
 
 # Copia los archivos del proyecto al contenedor
@@ -13,14 +16,15 @@ COPY . /var/www/html
 # Establece el directorio de trabajo
 WORKDIR /var/www/html
 
-# Configura permisos para Apache
-RUN chown -R www-data:www-data /var/www/html \&& chmod -R 755 /var/www/html
+# Ajusta permisos
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html
 
-# Instala composer
+# Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Instala las dependencias de composer
-Run composer install --no-dev --optimize-autoloader
+# Instala dependencias de Composer
+RUN composer install --no-dev --optimize-autoloader
 
-# Exponer el puerto
+# Exponer el puerto 80
 EXPOSE 80
