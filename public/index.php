@@ -11,6 +11,7 @@ $container = new Container();
 AppFactory::setContainer($container);
 
 $app = AppFactory::create();
+$app->addErrorMiddleware(true, true, true);
 
 // Cargar variables de entorno
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
