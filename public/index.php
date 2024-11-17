@@ -1,13 +1,11 @@
 <?php
 
-// use App\Controllers\HomeController;
+use App\Controllers\HomeController;
 use Slim\Factory\AppFactory;
 use DI\Container;
 // use Dotenv\Dotenv;
-use Illuminate\Database\Capsule\Manager as Capsule;
+// use Illuminate\Database\Capsule\Manager as Capsule;
 use Slim\Exception\HttpNotFoundException;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -51,10 +49,7 @@ $app->addErrorMiddleware(true, true, true)
 // });
 
 // Cargar rutas
-$app->get('/', function (Request $request, Response $response) {
-    $response->getBody()->write("Hello, Slim!");
-    return $response;
-});
+$app->get('/', [HomeController::class, 'index']);
 // (require __DIR__ . '/../src/routes.php')($app);
 
 $app->run();
