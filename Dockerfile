@@ -17,7 +17,7 @@ WORKDIR /var/www/html
 RUN chown -R www-data:www-data /var/www/html \&& chmod -R 755 /var/www/html
 
 # Instala composer
-COPY --from=composer:lastest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Instala las dependencias de composer
 Run composer install --no-dev --optimize-autoloader
