@@ -22,7 +22,7 @@ return function (App $app) {
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     });
 
-    $app->get('/api', [HomeController::class, 'index']);
+    $app->get('/', [HomeController::class, 'index']);
     $app->post('/api/register', [AuthController::class ,'register']);
     $app->post('/api/login', [AuthController::class ,'login']);
 

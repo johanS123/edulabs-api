@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class HomeController {
     public function index(Request $request, Response $response, $args)
     {
-        $response->getBody()->write('Bienvenido al home');
+        $response->getBody()->write(json_encode(['message' => 'Bienvenido al home']));
         return $response->withHeader('Content-Type', 'application/json');
     }
 }
