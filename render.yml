@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: slim-api
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        value: your_app_key_here
+    healthCheckPath: /
