@@ -23,7 +23,7 @@ return function (App $app) {
         $group->delete('/posts/{id}', \App\Controllers\PostController::class . ':delete');
     });
 
-    $app->any('/{path:.*}', function ($request, $response) {
+    $app->any('/{path:.*}', function (Request $request, Response $response) {
         $data = ['error' => 'Ruta no encontrada'];
         return $response
             ->withHeader('Content-Type', 'application/json')
