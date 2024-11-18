@@ -11,4 +11,6 @@ return function (App $app) {
     });
 
     $app->get('/home', \App\Controllers\HomeController::class . ':index');
+    $app->post('/api/register', \App\Controllers\AuthController::class . ':register');
+    $app->post('/api/login', \App\Controllers\AuthController::class . ':login');
 };
