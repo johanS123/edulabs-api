@@ -22,4 +22,12 @@ return function (App $app) {
         $group->get('/posts/{categoryId}', \App\Controllers\PostController::class . ':getPostsByCategory');
         $group->delete('/posts/{id}', \App\Controllers\PostController::class . ':delete');
     });
+
+    $app->any('/{path:.*}', function ($request, $response) {
+        $data = ['error' => 'Ruta no encontrada'];
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(404)
+            ->getBody()->write(json_encode($data));
+    });
 };
