@@ -7,9 +7,11 @@ class Database
 {
     public static function initialize(): Capsule
     {
-        // Cargar el archivo .env
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
-        $dotenv->load();
+        // En producción, Render ya proporciona las variables de entorno
+        if (file_exists(__DIR__ . '/../../.env')) {
+            $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+            $dotenv->load();
+        }
         
         // Crear la instancia de Capsule
         $capsule = new Capsule;
