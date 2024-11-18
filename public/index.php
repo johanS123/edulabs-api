@@ -8,8 +8,8 @@ use DI\Container;
 require __DIR__ . '/../vendor/autoload.php';
 
 // Inicializar la configuración de la base de datos
-// require __DIR__ . '/../src/Config/database.php';
-// $capsule = Database::initialize();
+require __DIR__ . '/../src/Config/database.php';
+$capsule = Database::initialize();
 
 // $container = new Container();
 // AppFactory::setContainer($container);
