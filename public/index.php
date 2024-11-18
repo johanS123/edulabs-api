@@ -1,19 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Middleware\AuthMiddleware;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
 
 $app = AppFactory::create();
 
-$app->get('/', function (Request $request, Response $response, $args) {
-    $response->getBody()->write("Hello world!");
-    return $response;
-});
-
-$app->get('/home', \App\Controllers\HomeController::class . ':index');
+// Cargar rutas
+(require __DIR__ . '/../src/routes.php')($app);
 
 $app->run();
