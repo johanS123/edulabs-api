@@ -3,8 +3,21 @@
 use Slim\App;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpNotFoundException;
 
 return function (App $app) {
+    $app->options('/{routes:.+}', function ($request, $response, $args) {
+        return $response;
+    });
+    
+    $app->add(function ($request, $handler) {
+        $response = $handler->handle($request);
+        return $response
+                ->withHeader('Access-Control-Allow-Origin', 'https://rainbow-lily-9716c3.netlify.app')
+                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    });
+
     $app->get('/', function (Request $request, Response $response, $args) {
         $response->getBody()->write("Hello world!");
         return $response;
@@ -26,5 +39,9 @@ return function (App $app) {
     $app->any('/{path:.*}', function ($request, $response) {
         $response->getBody()->write('Not Found');
         return $response->withHeader('Content-Type', 'text/plain')->withStatus(404);
+    });
+
+    $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+        throw new HttpNotFoundException($request);
     });
 };
