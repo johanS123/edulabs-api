@@ -13,4 +13,13 @@ return function (App $app) {
     $app->get('/home', \App\Controllers\HomeController::class . ':index');
     $app->post('/api/register', \App\Controllers\AuthController::class . ':register');
     $app->post('/api/login', \App\Controllers\AuthController::class . ':login');
+
+    $app->group('/api', function ($group) {
+        // posts
+        $group->get('/posts', \App\Controllers\PostController::class . ':index');
+        $group->post('/posts', \App\Controllers\PostController::class . ':store');
+        $group->put('/posts/{id}', \App\Controllers\PostController::class . ':update');
+        $group->get('/posts/{categoryId}', \App\Controllers\PostController::class . ':getPostsByCategory');
+        $group->delete('/posts/{id}', \App\Controllers\PostController::class . ':delete');
+    });
 };
