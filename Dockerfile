@@ -13,14 +13,14 @@ RUN a2enmod rewrite
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
 # Copia los archivos del proyecto al contenedor
-COPY . /var/www/html
+COPY . /var/www/slim-api
 
 # Establece el directorio de trabajo
-WORKDIR /var/www/edulabs-api
+WORKDIR /var/www/slim-api
 
 # Ajusta permisos
-RUN chown -R www-data:www-data /var/www/edulabs-api \
-    && chmod -R 775 /var/www/edulabs-api
+RUN chown -R www-data:www-data /var/www/slim-api \
+    && chmod -R 775 /var/www/slim-api
 
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
