@@ -1,9 +1,0 @@
-#both .vercelignore and .gitignore
-
-# PHP
-
-/vendor
-
-# Vercel
-
-.vercel
