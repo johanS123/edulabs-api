@@ -1,36 +1,32 @@
 # Usa una imagen base de PHP con Apache
 FROM php:8.2-apache
 
-# Instalar dependencias necesarias para Slim y PHP
+# Instala las extensiones necesarias
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
+    libpq-dev \
+    libzip-dev \
     zip \
-    git \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    unzip \
     && docker-php-ext-install pdo pdo_pgsql pdo_mysql
 
-# Habilitar el módulo de Apache rewrite
+# Habilita los módulos de Apache necesarios
 RUN a2enmod rewrite
 
-# Configurar el DocumentRoot a la carpeta public de Slim
-RUN sed -i 's|/var/www/html|/var/www/html/public|' /etc/apache2/sites-available/000-default.conf
+# Copia los archivos del proyecto al contenedor
+COPY . /var/www/html
 
-# Establecer el directorio de trabajo en el contenedor
+# Configura el directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar los archivos del proyecto al contenedor
-COPY . .
-
-# Instalar Composer (gestor de dependencias de PHP)
+# Instala las dependencias de Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install
 
-# Instalar las dependencias del proyecto usando Composer
-RUN composer install --no-dev --optimize-autoloader
+# Da permisos al directorio
+RUN chown -R www-data:www-data /var/www/html
 
-# Exponer el puerto 80 para la aplicación
+# Exponer el puerto 80 para Apache
 EXPOSE 80
 
-# Iniciar el servidor Apache
+# Comando de inicio
 CMD ["apache2-foreground"]
