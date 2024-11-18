@@ -49,7 +49,7 @@ $app->addErrorMiddleware(true, true, true)
 // });
 
 // Cargar rutas
-$app->get('/', [\App\Controllers\HomeController::class, 'index']);
+$app->get('/', App\Controllers\HomeController::class . ':index');
 // (require __DIR__ . '/../src/routes.php')($app);
 
 $app->run();
