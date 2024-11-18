@@ -11,14 +11,14 @@ require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../src/Config/database.php';
 $capsule = Database::initialize();
 
-// $container = new Container();
-// AppFactory::setContainer($container);
+$container = new Container();
+AppFactory::setContainer($container);
 
 $app = AppFactory::create();
 
-// $container->set('db', function () use ($capsule) {
-//     return $capsule;
-// });
+$container->set('db', function () use ($capsule) {
+    return $capsule;
+});
 
 // Cargar rutas
 (require __DIR__ . '/../src/routes.php')($app);
