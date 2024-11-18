@@ -14,9 +14,6 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-$app->get('/home', function (Request $request, Response $response) {
-    $response->getBody()->write(json_encode(['message' => 'Bienvenido al home']));
-    return $response->withHeader('Content-Type', 'application/json');
-});
+$app->get('/home', \App\Controllers\HomeController::class . ':index');
 
 $app->run();
