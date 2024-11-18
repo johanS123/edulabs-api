@@ -5,12 +5,12 @@ use Dotenv\Dotenv;
 
 class Database
 {
-    public static function initialize()
+    public static function initialize(): Capsule
     {
         // Cargar el archivo .env
         $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
         $dotenv->load();
-
+        
         // Crear la instancia de Capsule
         $capsule = new Capsule;
 
@@ -31,5 +31,7 @@ class Database
 
         // Iniciar Eloquent
         $capsule->bootEloquent();
+
+        return $capsule;
     }
 }
