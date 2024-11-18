@@ -16,9 +16,6 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-$app->get('/home', function (Request $request, Response $response, $args) {
-    $response->getBody()->write("Hello api!");
-    return $response;
-})->add(AuthMiddleware::class);
+$app->get('/home', \App\Controllers\HomeController::class . ':index');
 
 $app->run();
