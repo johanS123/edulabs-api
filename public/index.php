@@ -9,14 +9,16 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $app = AppFactory::create();
 
+$app->addRoutingMiddleware();
+
 $app->get('/', function (Request $request, Response $response, $args) {
     $response->getBody()->write("Hello world!");
     return $response;
 });
 
-$app->get('/api', function (Request $request, Response $response, $args) {
+$app->get('/home', function (Request $request, Response $response, $args) {
     $response->getBody()->write("Hello api!");
     return $response;
-})->add(new AuthMiddleware());
+})->add(AuthMiddleware::class);
 
 $app->run();
