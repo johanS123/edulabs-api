@@ -16,11 +16,11 @@ COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 COPY . /var/www/html
 
 # Establece el directorio de trabajo
-WORKDIR /var/www/html
+WORKDIR /var/www/edulabs-api
 
 # Ajusta permisos
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html
+RUN chown -R www-data:www-data /var/www/edulabs-api \
+    && chmod -R 775 /var/www/edulabs-api
 
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
