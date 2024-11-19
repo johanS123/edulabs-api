@@ -32,7 +32,7 @@ return function (App $app) {
         $group->get('/posts', \App\Controllers\PostController::class . ':index');
         $group->post('/posts', \App\Controllers\PostController::class . ':store');
         $group->put('/posts/{id}', \App\Controllers\PostController::class . ':update');
-        $group->get('/posts/{categoryId}', \App\Controllers\PostController::class . ':getPostsByCategory');
+        $group->get('/posts/{categoryid}', \App\Controllers\PostController::class . ':getPostsByCategory');
         $group->delete('/posts/{id}', \App\Controllers\PostController::class . ':delete');
          // usuarios
          $group->get('/users', \App\Controllers\UserController::class . ':index');
