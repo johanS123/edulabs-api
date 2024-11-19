@@ -34,6 +34,14 @@ return function (App $app) {
         $group->put('/posts/{id}', \App\Controllers\PostController::class . ':update');
         $group->get('/posts/{categoryId}', \App\Controllers\PostController::class . ':getPostsByCategory');
         $group->delete('/posts/{id}', \App\Controllers\PostController::class . ':delete');
+         // usuarios
+         $group->get('/users', \App\Controllers\UserController::class . ':index');
+         $group->get('/users/{id}', \App\Controllers\UserController::class . ':show');
+         $group->put('/users/{id}', \App\Controllers\UserController::class . ':update');
+         $group->delete('/users/{id}', \App\Controllers\UserController::class . ':delete');
+         // categorias
+         $group->get('/categories', \App\Controllers\CategoryController::class . ':index');
+
     });
 
     $app->any('/{path:.*}', function ($request, $response) {
