@@ -76,7 +76,7 @@ class PostController {
     public function getPostsByCategory(Request $request, Response $response, array $args)
     {
         // Obtener el ID de la categoría desde los parámetros de la ruta
-        $categoryId = $args['categoryId'];
+        $categoryId = $args['categoryid'];
 
         // Verificar si la categoría existe
         $category = Category::find($categoryId);
@@ -91,7 +91,7 @@ class PostController {
         $posts = Post::with(['user', 'category'])->get();
 
         // Obtener todos los posts que pertenecen a la categoría
-        $posts = Post::where('categoryId', $categoryId)->get();
+        $posts = Post::where('categoryid', $categoryId)->get();
 
         // Retorna los posts como JSON sin el campo de password del usuario
         $data = $posts->map(function ($post) {
