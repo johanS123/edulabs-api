@@ -45,7 +45,7 @@ class PostController {
             $errors['user'] = 'El campo userId es obligatorio.';
         }
         if (empty($data['category'])) {
-            $errors['category'] = 'El campo categoryId es obligatorio.';
+            $errors['category'] = 'El campo categoryid es obligatorio.';
         }
 
          // Validación de las llaves foráneas
@@ -139,7 +139,7 @@ class PostController {
         // Actualizar los campos que se envían en el request
         $post->title = $data['title'] ?? $post->title;
         $post->content = $data['content'] ?? $post->content;
-        $post->categoryId = $data['categoryid'] ?? $post->categoryId;
+        $post->categoryid = $data['categoryid'] ?? $post->categoryid;
 
         $post->save();
 
