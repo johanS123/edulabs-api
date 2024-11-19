@@ -65,7 +65,7 @@ class PostController {
         $post = Post::create([
             'title' => $data['title'],
             'content' => $data['content'],
-            'userId' => $data['user'],
+            'userid' => $data['user'],
             'categoryid' => $data['category']
         ]);
 
