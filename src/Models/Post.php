@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model {
     protected $table = 'posts';
-    protected $fillable = ['title', 'content', 'userId', 'categoryId'];
+    protected $fillable = ['title', 'content', 'userid', 'categoryid'];
     public $timestamps = false;
 
     public function user() {
-        return $this->belongsTo(User::class, 'userId');
+        return $this->belongsTo(User::class, 'userid');
     }
 
     public function category() {
-        return $this->belongsTo(Category::class, 'categoryId');
+        return $this->belongsTo(Category::class, 'categoryid');
     }
 }
