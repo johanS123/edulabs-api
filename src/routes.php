@@ -1,12 +1,8 @@
 <?php
 
 use Slim\App;
-use App\Controllers\AuthController;
-use App\Controllers\PostController;
-use App\Controllers\UserController;
-use App\Controllers\CategoryController;
-use App\Controllers\HomeController;
-use App\Middleware\AuthMiddleware;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 
 return function (App $app) {
@@ -22,26 +18,36 @@ return function (App $app) {
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     });
 
-    $app->get('/', [HomeController::class, 'index']);
-    $app->post('/api/register', [AuthController::class ,'register']);
-    $app->post('/api/login', [AuthController::class ,'login']);
+    $app->get('/', function (Request $request, Response $response, $args) {
+        $response->getBody()->write("Hello world!");
+        return $response;
+    });
+
+    $app->get('/home', \App\Controllers\HomeController::class . ':index');
+    $app->post('/api/register', \App\Controllers\AuthController::class . ':register');
+    $app->post('/api/login', \App\Controllers\AuthController::class . ':login');
 
     $app->group('/api', function ($group) {
-        $group->get('/posts', [PostController::class, 'index']);
-        $group->post('/posts', [PostController::class, 'store']);
-        $group->put('/posts/{id}', [PostController::class, 'update']);
-        $group->get('/posts/{categoryId}', [PostController::class, 'getPostsByCategory']);
-        $group->delete('/posts/{id}', [UserController::class, 'delete']);
-        // usuarios
-        $group->get('/users', [UserController::class, 'index']);
-        $group->get('/users/{id}', [UserController::class, 'show']);
-        $group->put('/users/{id}', [UserController::class, 'update']);
-        $group->delete('/users/{id}', [UserController::class, 'delete']);
-        // categorias
-        $group->get('/categories', [CategoryController::class, 'index']);
-    
-    })->add(AuthMiddleware::class);
+        // posts
+        $group->get('/posts', \App\Controllers\PostController::class . ':index');
+        $group->post('/posts', \App\Controllers\PostController::class . ':store');
+        $group->put('/posts/{id}', \App\Controllers\PostController::class . ':update');
+        $group->get('/posts/{categoryid}', \App\Controllers\PostController::class . ':getPostsByCategory');
+        $group->delete('/posts/{id}', \App\Controllers\PostController::class . ':delete');
+         // usuarios
+         $group->get('/users', \App\Controllers\UserController::class . ':index');
+         $group->get('/users/{id}', \App\Controllers\UserController::class . ':show');
+         $group->put('/users/{id}', \App\Controllers\UserController::class . ':update');
+         $group->delete('/users/{id}', \App\Controllers\UserController::class . ':delete');
+         // categorias
+         $group->get('/categories', \App\Controllers\CategoryController::class . ':index');
 
+    });
+
+    $app->any('/{path:.*}', function ($request, $response) {
+        $response->getBody()->write('Not Found');
+        return $response->withHeader('Content-Type', 'text/plain')->withStatus(404);
+    });
 
     $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
         throw new HttpNotFoundException($request);

@@ -1,32 +1,34 @@
 # Usa una imagen base de PHP con Apache
-FROM php:8.2.12-apache
+FROM php:8.2-apache
 
-# Instala dependencias del sistema y extensiones de PHP
+# Instalar dependencias necesarias para Slim y PHP
 RUN apt-get update && apt-get install -y \
-    libzip-dev zip unzip \
-    && docker-php-ext-install pdo pdo_mysql
+    libpq-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    && docker-php-ext-install pdo pdo_pgsql pdo_mysql
 
-# Habilita el módulo de reescritura de Apache
+# Habilitar el módulo de Apache rewrite
 RUN a2enmod rewrite
 
-# Copia la configuración personalizada de Apache
-COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
+# Configurar el DocumentRoot a la carpeta public de Slim
+RUN sed -i 's|/var/www/html|/var/www/html/public|' /etc/apache2/sites-available/000-default.conf
 
-# Copia los archivos del proyecto al contenedor
-COPY . /var/www/html
-
-# Establece el directorio de trabajo
+# Establecer el directorio de trabajo en el contenedor
 WORKDIR /var/www/html
 
-# Ajusta permisos
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html
+# Copiar los archivos del proyecto al contenedor
+COPY . .
 
-# Instala Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Instalar Composer (gestor de dependencias de PHP)
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Instala dependencias de Composer
+# Instalar las dependencias del proyecto usando Composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Exponer el puerto 80
+# Exponer el puerto 80 para la aplicación
 EXPOSE 80
+
+# Iniciar el servidor Apache
+CMD ["apache2-foreground"]

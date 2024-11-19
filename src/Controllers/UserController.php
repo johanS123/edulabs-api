@@ -11,7 +11,7 @@ class UserController
     // Obtener todos los usuarios
     public function index(Request $request, Response $response, $args)
     {
-        $users = User::select('id', 'name', 'email', 'createDate')->get();
+        $users = User::select('id', 'name', 'email', 'createdate')->get();
         $response->getBody()->write(json_encode($users));
         return $response->withHeader('Content-Type', 'application/json');
     }

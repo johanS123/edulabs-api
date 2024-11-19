@@ -45,7 +45,7 @@ class PostController {
             $errors['user'] = 'El campo userId es obligatorio.';
         }
         if (empty($data['category'])) {
-            $errors['category'] = 'El campo categoryId es obligatorio.';
+            $errors['category'] = 'El campo categoryid es obligatorio.';
         }
 
          // Validación de las llaves foráneas
@@ -65,8 +65,8 @@ class PostController {
         $post = Post::create([
             'title' => $data['title'],
             'content' => $data['content'],
-            'userId' => $data['user'],
-            'categoryId' => $data['category']
+            'userid' => $data['user'],
+            'categoryid' => $data['category']
         ]);
 
         $response->getBody()->write(json_encode($post));
@@ -76,7 +76,7 @@ class PostController {
     public function getPostsByCategory(Request $request, Response $response, array $args)
     {
         // Obtener el ID de la categoría desde los parámetros de la ruta
-        $categoryId = $args['categoryId'];
+        $categoryId = $args['categoryid'];
 
         // Verificar si la categoría existe
         $category = Category::find($categoryId);
@@ -91,7 +91,7 @@ class PostController {
         $posts = Post::with(['user', 'category'])->get();
 
         // Obtener todos los posts que pertenecen a la categoría
-        $posts = Post::where('categoryId', $categoryId)->get();
+        $posts = Post::where('categoryid', $categoryId)->get();
 
         // Retorna los posts como JSON sin el campo de password del usuario
         $data = $posts->map(function ($post) {
@@ -139,7 +139,7 @@ class PostController {
         // Actualizar los campos que se envían en el request
         $post->title = $data['title'] ?? $post->title;
         $post->content = $data['content'] ?? $post->content;
-        $post->categoryId = $data['categoryId'] ?? $post->categoryId;
+        $post->categoryid = $data['categoryid'] ?? $post->categoryid;
 
         $post->save();
 
