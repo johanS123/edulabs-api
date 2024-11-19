@@ -41,7 +41,8 @@ composer install
 El proyecto requiere un archivo `.env` para configurar las variables de entorno necesarias. Este archivo debe crearse en la raíz del proyecto y debe contener las siguientes variables:  
 
 ```env  
-DB_HOST=localhost  
+DB_HOST=localhost
+DB_PORT=5432
 DB_NAME=nombre_base_de_datos  
 DB_USER=usuario_base_de_datos  
 DB_PASS=contraseña_base_de_datos  
