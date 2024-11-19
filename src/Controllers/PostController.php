@@ -75,8 +75,6 @@ class PostController {
 
     public function getPostsByCategory(Request $request, Response $response, array $args)
     {
-        echo json_encode($args);
-        
         // Obtener el ID de la categoría desde los parámetros de la ruta
         $categoryId = $args['categoryid'];
 
