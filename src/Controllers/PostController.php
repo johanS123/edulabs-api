@@ -66,7 +66,7 @@ class PostController {
             'title' => $data['title'],
             'content' => $data['content'],
             'userId' => $data['user'],
-            'categoryId' => $data['category']
+            'categoryid' => $data['category']
         ]);
 
         $response->getBody()->write(json_encode($post));
@@ -139,7 +139,7 @@ class PostController {
         // Actualizar los campos que se envían en el request
         $post->title = $data['title'] ?? $post->title;
         $post->content = $data['content'] ?? $post->content;
-        $post->categoryId = $data['categoryId'] ?? $post->categoryId;
+        $post->categoryId = $data['categoryid'] ?? $post->categoryId;
 
         $post->save();
 
