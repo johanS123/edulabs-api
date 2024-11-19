@@ -70,7 +70,7 @@ A continuación, se presenta una lista de los endpoints disponibles en la API:
 | Método | Endpoint         | Descripción                         | Autenticación |  
 |--------|------------------|-------------------------------------|---------------|  
 | GET    | `/api/posts`     | Obtiene una lista de todos los posts.| Sí           |  
-| GET    | `/api/posts/{id}`| Obtiene un post específico por ID.   | Sí           |  
+| GET    | `/api/posts/{categoryid}`| Obtiene un post específico por el id de la categoria.   | Sí           |  
 | POST   | `/api/posts`     | Crea un nuevo post.                 | Sí            |  
 | PUT    | `/api/posts/{id}`| Actualiza un post existente por ID. | Sí            |  
 | DELETE | `/api/posts/{id}`| Elimina un post por ID.             | Sí            |  
